@@ -13,12 +13,21 @@ export default function Home({ launches }) {
       </Head>
 
       <main className={styles.main}>
+        <img
+          src="https://images.unsplash.com/photo-1517976547714-720226b864c1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+          alt=""
+          className={styles.headerImage}
+        />
         <h1 className={styles.title}>Space X Launches</h1>
 
         <p className={styles.description}>
           Get all sorts of information about previous Space X launches, like
           information about the rocket, astronauts, and more!
         </p>
+
+        <div className={styles.sectionHeading}>
+          <h2>Recent Launches</h2>
+        </div>
 
         <div className={styles.grid}>
           {launches.map((launch) => {
@@ -37,22 +46,17 @@ export default function Home({ launches }) {
                     "en-IN"
                   )}
                 </p>
-                <h3>Rocket Name - {launch.rocket.rocket_name}</h3>
+                <div>
+                  <h3>Rocket Name - {launch.rocket.rocket_name}</h3>
+                  <h3>Company - {launch.rocket.rocket.company}</h3>
+                  <h3>Country - {launch.rocket.rocket.country}</h3>
+                  <h3 className={styles.desc}>
+                    Description - {launch.rocket.rocket.description}
+                  </h3>
+                </div>
               </a>
             );
           })}
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
         </div>
       </main>
 
@@ -80,7 +84,7 @@ export async function getStaticProps() {
   const { data } = await client.query({
     query: gql`
       query GetLaunches {
-        launchesPast(limit: 10) {
+        launchesPast(limit: 12) {
           id
           mission_name
           launch_date_local
@@ -94,6 +98,11 @@ export async function getStaticProps() {
           }
           rocket {
             rocket_name
+            rocket {
+              company
+              country
+              description
+            }
           }
         }
       }
